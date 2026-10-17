@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# Explain an English word with Claude Code and append the result to history.txt.
+set -euo pipefail
+
+dir="$(dirname "$(readlink -f "$0")")"  # resolves symlinks, e.g. ~/.local/bin/word
+
+word="$*"
+[ -z "$word" ] && read -rp "Word: " word
+
+output="$(claude -p "$word" \
+  --system-prompt "$(cat "$dir/prompt.md")" \
+  --tools "" \
+  --no-session-persistence \
+  --model sonnet)"
+
+printf '%s\n\n' "$output" >> "$dir/history.txt"
+
+if command -v glow >/dev/null; then
+  glow - <<<"$output"
+else
+  printf '%s\n' "$output"
+fi
