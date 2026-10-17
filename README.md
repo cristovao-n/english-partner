@@ -1,6 +1,6 @@
 # english-assistant
 
-Type an English word and get a detailed explanation: Portuguese translation, meanings by part of speech, usage examples, and synonyms. Every explanation is also appended to `history.txt`.
+Type an English word and get a detailed explanation: Portuguese translation, meanings by part of speech, usage examples, and synonyms. Every explanation is also appended to `history.md`.
 
 It uses [Claude Code](https://claude.com/claude-code) in headless mode (`claude -p`) as the engine, so it needs no API key or Python dependencies.
 
@@ -23,7 +23,7 @@ To use it from any directory:
 ln -s "$PWD/word" ~/.local/bin/word
 ```
 
-The history is always written to `history.txt` next to the script.
+The history is always written to `history.md` next to the script.
 
 ## Customizing
 

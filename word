@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Explain an English word with Claude Code and append the result to history.txt.
+# Explain an English word with Claude Code and append the result to history.md.
 set -euo pipefail
 
 dir="$(dirname "$(readlink -f "$0")")"  # resolves symlinks, e.g. ~/.local/bin/word
@@ -7,13 +7,17 @@ dir="$(dirname "$(readlink -f "$0")")"  # resolves symlinks, e.g. ~/.local/bin/w
 word="$*"
 [ -z "$word" ] && read -rp "Word: " word
 
-output="$(claude -p "$word" \
+# Label the word explicitly: Claude Code wraps the user turn in context blocks
+# that can bury a bare word.
+output="$(claude -p "Explain this English word or expression: $word" \
   --system-prompt "$(cat "$dir/prompt.md")" \
   --tools "" \
+  --strict-mcp-config \
   --no-session-persistence \
-  --model sonnet)"
+  --model sonnet \
+  --effort low)"
 
-printf '%s\n\n' "$output" >> "$dir/history.txt"
+printf '%s\n\n' "$output" >> "$dir/history.md"
 
 if command -v glow >/dev/null; then
   glow - <<<"$output"
